@@ -82,9 +82,10 @@ outdir=~/tmp
 # script, and once for the utility. In such cases it might be easier to
 # just add the argument/option to the final script that runs the utility
 # rather than these variables.
-utilname=table
-arguments=vec.fits
-options="-YO --transpose"
+utilname=cosmiccal
+arguments=
+options="-z2 --age --olambda=10"
+
 
 
 # RUN THE PROCEDURES
