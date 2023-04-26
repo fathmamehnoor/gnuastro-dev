@@ -308,10 +308,12 @@ ui_check_options_and_arguments(struct mknoiseparams *p)
 void
 ui_preparations(struct mknoiseparams *p)
 {
+  gal_error_t **err=NULL;
+  
   /* Read the input image as a double type */
   p->input=gal_array_read_one_ch_to_type(p->inputname, p->cp.hdu, NULL,
                                          GAL_TYPE_FLOAT64, p->cp.minmapsize,
-                                         p->cp.quietmmap);
+                                         p->cp.quietmmap, &err);
   p->input->wcs=gal_wcs_read(p->inputname, p->cp.hdu, p->cp.wcslinearmatrix,
                              0, 0, &p->input->nwcs);
   p->input->ndim=gal_dimension_remove_extra(p->input->ndim, p->input->dsize,

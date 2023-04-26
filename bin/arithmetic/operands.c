@@ -224,6 +224,7 @@ operands_pop(struct arithmeticparams *p, char *operator)
   size_t i;
   gal_data_t *data;
   char *filename, *hdu;
+  gal_error_t **err=NULL;
   struct operand *operands=p->operands;
 
   /* If the operand linked list has finished, then give an error and
@@ -242,7 +243,7 @@ operands_pop(struct arithmeticparams *p, char *operator)
 
       /* Read the dataset and remove possibly extra dimensions. */
       data=gal_array_read_one_ch(filename, hdu, NULL, p->cp.minmapsize,
-                                 p->cp.quietmmap);
+                                 p->cp.quietmmap, err);
       data->ndim=gal_dimension_remove_extra(data->ndim, data->dsize, NULL);
 
       /* When the reference data structure's dimensionality is non-zero, it

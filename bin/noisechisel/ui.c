@@ -602,6 +602,7 @@ ui_preparations_read_input(struct noisechiselparams *p)
 {
   float *f;
   size_t ndim;
+  gal_error_t **err=NULL;
 
   /* Read the input as a single precision floating point dataset, also load
      the WCS and finally remove any possibly existing extra dimensions
@@ -609,7 +610,7 @@ ui_preparations_read_input(struct noisechiselparams *p)
   p->input = gal_array_read_one_ch_to_type(p->inputname, p->cp.hdu,
                                            NULL, GAL_TYPE_FLOAT32,
                                            p->cp.minmapsize,
-                                           p->cp.quietmmap);
+                                           p->cp.quietmmap, &err);
   p->input->wcs = gal_wcs_read(p->inputname, p->cp.hdu,
                                p->cp.wcslinearmatrix, 0, 0,
                                &p->input->nwcs);
@@ -668,6 +669,7 @@ ui_preparations_read_input(struct noisechiselparams *p)
 static void
 ui_preparations(struct noisechiselparams *p)
 {
+  gal_error_t **err=NULL;
   /* Prepare the names of the outputs. */
   ui_set_output_names(p);
 
@@ -682,7 +684,7 @@ ui_preparations(struct noisechiselparams *p)
       p->conv = gal_array_read_one_ch_to_type(p->convolvedname, p->chdu,
                                               NULL, GAL_TYPE_FLOAT32,
                                               p->cp.minmapsize,
-                                              p->cp.quietmmap);
+                                              p->cp.quietmmap, &err);
 
       /* Make sure the convolved image is the same size as the input. */
       if( gal_dimension_is_different(p->input, p->conv) )

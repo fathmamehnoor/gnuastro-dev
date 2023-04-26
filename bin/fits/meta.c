@@ -49,6 +49,8 @@ along with Gnuastro. If not, see <http://www.gnu.org/licenses/>.
 static void
 meta_initialize(struct fitsparams *p, gal_warp_wcsalign_t *wa)
 {
+  gal_error_t **err=NULL;
+  
   /* Low-level variables. */
   gal_data_t *input=NULL;
   struct gal_options_common_params *cp=&p->cp;
@@ -68,7 +70,7 @@ meta_initialize(struct fitsparams *p, gal_warp_wcsalign_t *wa)
 
   /* Read the input image and its WCS, must free it when done. */
   input=gal_array_read_one_ch_to_type(inputname, hdu, NULL,
-                                      GAL_TYPE_FLOAT64, -1,  0);
+                                      GAL_TYPE_FLOAT64, -1, 0, &err);
   input->wcs=gal_wcs_read(inputname, hdu, 0, 0, 0, &input->nwcs);
 
   /* Prepare the essential warping variables. */

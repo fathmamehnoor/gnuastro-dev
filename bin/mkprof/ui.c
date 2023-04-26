@@ -1915,6 +1915,7 @@ ui_read_custom_table(struct mkprofparams *p)
 static void
 ui_read_ndim(struct mkprofparams *p)
 {
+  gal_error_t **err=NULL;
   size_t i, *dsize, ndim_counter;
 
   if(p->kernel)
@@ -1954,7 +1955,7 @@ ui_read_ndim(struct mkprofparams *p)
               p->out=gal_array_read_one_ch_to_type(p->backname, p->backhdu,
                                                    NULL, GAL_TYPE_FLOAT32,
                                                    p->cp.minmapsize,
-                                                   p->cp.quietmmap);
+                                                   p->cp.quietmmap, &err);
               p->out->ndim=gal_dimension_remove_extra(p->out->ndim,
                                                       p->out->dsize, NULL);
               p->ndim=p->out->ndim;

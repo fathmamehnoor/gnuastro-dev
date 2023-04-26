@@ -1601,6 +1601,7 @@ arithmetic_final_read_file(struct arithmeticparams *p,
 {
   gal_data_t *out=NULL;
   char *hdu, *filename;
+  gal_error_t *err=NULL;
 
   /* Read the desired image and report it if necessary. */
   hdu=operand->hdu;
@@ -1610,7 +1611,7 @@ arithmetic_final_read_file(struct arithmeticparams *p,
       /* Read the data, note that the WCS has already been set. */
       out=gal_array_read_one_ch(filename, hdu, NULL,
                                 p->cp.minmapsize,
-                                p->cp.quietmmap);
+                                p->cp.quietmmap, &err);
       out->ndim=gal_dimension_remove_extra(out->ndim, out->dsize,
                                             NULL);
       if(!p->cp.quiet) printf(" - %s (hdu %s) is read.\n", filename, hdu);

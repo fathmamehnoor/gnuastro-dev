@@ -55,8 +55,10 @@ __BEGIN_C_DECLS  /* From C++ preparations */
 /* Error codes for this library. */
 enum gal_array_error
 {
-  GAL_ARRAY_ERROR_INVALID,      /* =0 by default. */
-  GAL_ARRAY_ERROR_BUG,          /* Unknown situation. */
+  GAL_ARRAY_ERROR_INVALID,              /* =0 by default. */
+  GAL_ARRAY_ERROR_BUG,                  /* Unknown situation. */
+  GAL_ARRAY_ERROR_ASPRINTF_ALLOCATION,  /* Error in asprintf allocation */
+  GAL_ARRAY_ERROR_NOT_MONOCHROME,       /* More than one channel */
 };
 
 
@@ -74,21 +76,21 @@ gal_array_file_recognized(char *name);
 
 gal_data_t *
 gal_array_read(char *filename, char *extension, gal_list_str_t *lines,
-               size_t minmapsize, int quietmmap);
+               size_t minmapsize, int quietmmap, gal_error_t **err);
 
 gal_data_t *
 gal_array_read_to_type(char *filename, char *extension,
                        gal_list_str_t *lines, uint8_t type,
-                       size_t minmapsize, int quietmmap);
+                       size_t minmapsize, int quietmmap, gal_error_t **err);
 
 gal_data_t *
 gal_array_read_one_ch(char *filename, char *extension, gal_list_str_t *lines,
-                      size_t minmapsize, int quietmmap);
+                      size_t minmapsize, int quietmmap, gal_error_t **err);
 
 gal_data_t *
 gal_array_read_one_ch_to_type(char *filename, char *extension,
                               gal_list_str_t *lines, uint8_t type,
-                              size_t minmapsize, int quietmmap);
+                              size_t minmapsize, int quietmmap, gal_error_t **err);
 
 
 __END_C_DECLS    /* From C++ preparations */

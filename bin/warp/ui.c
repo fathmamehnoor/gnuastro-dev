@@ -653,6 +653,8 @@ ui_check_options_and_arguments_wcsalign(struct warpparams *p)
 static void
 ui_check_options_and_arguments(struct warpparams *p)
 {
+  gal_error_t **err=NULL;
+  
   /* Read the input.*/
   if(p->inputname==NULL)
     error(EXIT_FAILURE, 0, "no input file is specified");
@@ -676,7 +678,7 @@ ui_check_options_and_arguments(struct warpparams *p)
   p->input=gal_array_read_one_ch_to_type(p->inputname, p->cp.hdu,
                                          NULL, GAL_TYPE_FLOAT64,
                                          p->cp.minmapsize,
-                                         p->cp.quietmmap);
+                                         p->cp.quietmmap, &err);
 
   /* Read the WCS and remove one-element wide dimension(s). */
   p->input->wcs=gal_wcs_read(p->inputname, p->cp.hdu,

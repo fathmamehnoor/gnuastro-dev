@@ -118,7 +118,7 @@ gal_array_file_recognized(char *name)
    extension/dir of the given file. */
 gal_data_t *
 gal_array_read(char *filename, char *extension, gal_list_str_t *lines,
-               size_t minmapsize, int quietmmap)
+               size_t minmapsize, int quietmmap, gal_error_t **err)
 {
   size_t ext;
 
@@ -143,9 +143,10 @@ gal_array_read(char *filename, char *extension, gal_list_str_t *lines,
 
   /* Control should not get to here, but just to avoid compiler warnings,
      we'll return a NULL. */
-  error(EXIT_FAILURE, 0, "%s: a bug! Please contact us at %s to solve the "
+  gal_array_error(err, GAL_ARRAY_ERROR_BUG, 0, 
+        "%s: a bug! Please contact us at %s to solve the "
         "problem. Control must not reach the end of this function", __func__,
-        PACKAGE_BUGREPORT);
+         PACKAGE_BUGREPORT);
   return NULL;
 }
 
@@ -157,11 +158,11 @@ gal_array_read(char *filename, char *extension, gal_list_str_t *lines,
 gal_data_t *
 gal_array_read_to_type(char *filename, char *extension,
                        gal_list_str_t *lines, uint8_t type,
-                       size_t minmapsize, int quietmmap)
+                       size_t minmapsize, int quietmmap, gal_error_t **err)
 {
   gal_data_t *out=NULL;
   gal_data_t *next, *in=gal_array_read(filename, extension, lines,
-                                       minmapsize, quietmmap);
+                                       minmapsize, quietmmap, err);
 
   /* Go over all the channels. */
   while(in)
@@ -184,23 +185,25 @@ gal_array_read_to_type(char *filename, char *extension,
 /* Read the input array and make sure it is only one channel. */
 gal_data_t *
 gal_array_read_one_ch(char *filename, char *extension, gal_list_str_t *lines,
-                      size_t minmapsize, int quietmmap)
+                      size_t minmapsize, int quietmmap, gal_error_t **err)
 {
   char *fname;
   gal_data_t *out;
-  out=gal_array_read(filename, extension, lines, minmapsize, quietmmap);
+  out=gal_array_read(filename, extension, lines, minmapsize, quietmmap, err);
 
   if(out->next)
     {
       if(extension)
         {
           if( asprintf(&fname, "%s (hdu %s)", filename, extension)<0 )
-            error(EXIT_FAILURE, 0, "%s: asprintf allocation error", __func__);
+            gal_array_error(err, GAL_ARRAY_ERROR_ASPRINTF_ALLOCATION, 0, 
+            "%s: asprintf allocation error", __func__);
         }
       else
         fname=filename;
 
-      error(EXIT_FAILURE, 0, "%s: contains %zu channels (it isn't "
+      gal_array_error(err, GAL_ARRAY_ERROR_NOT_MONOCHROME, 0, 
+            "%s: contains %zu channels (it isn't "
             "monochrome).\n\n"
             "You can use Gnuastro's ConvertType program to separate the "
             "(color) channels into separate extensions of a FITS file, with "
@@ -220,10 +223,10 @@ gal_array_read_one_ch(char *filename, char *extension, gal_list_str_t *lines,
 gal_data_t *
 gal_array_read_one_ch_to_type(char *filename, char *extension,
                               gal_list_str_t *lines, uint8_t type,
-                              size_t minmapsize, int quietmmap)
+                              size_t minmapsize, int quietmmap, gal_error_t **err)
 {
   gal_data_t *out=gal_array_read_one_ch(filename, extension, lines,
-                                        minmapsize, quietmmap);
+                                        minmapsize, quietmmap, err);
 
   return gal_data_copy_to_new_type_free(out, type);
 }
